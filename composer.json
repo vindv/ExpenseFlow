@@ -1,0 +1,13 @@
+{
+  "name": "expenseflow/app",
+  "type": "project",
+  "require": {
+    "php": "^8.3",
+    "ext-pdo": "*"
+  },
+  "autoload": {
+    "psr-4": {
+      "ExpenseFlow\\": "src/"
+    }
+  }
+}
