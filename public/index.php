@@ -65,7 +65,7 @@ try {
 
         $userId = $auth->register($name, $email, $password);
 
-        respondJson(201, [
+        JsonResponse::send(201, [
             'data' => ['id' => $userId],
         ]);
     }
