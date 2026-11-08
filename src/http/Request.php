@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace ExpenseFlow\http;
 
 use ExpenseFlow\exceptions\ValidationException;
+use RuntimeException;
 use JsonException;
 
 class Request
@@ -30,7 +31,7 @@ class Request
         $body = @file_get_contents('php://input');
 
         if($body === false) {
-            throw new ValidationException('Unable to read the request body.');
+            throw new RuntimeException('Unable to read the request body.');
         }
 
         try {
