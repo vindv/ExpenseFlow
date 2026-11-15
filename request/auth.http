@@ -1,5 +1,25 @@
-### GET request to example server
-GET https://examples.http-client.intellij.net/get
-    ?generated-in=PhpStorm
+### Registro válido
+POST http://localhost:8000/register
+Content-Type: application/json
 
-###
+{
+  "name": "Luis",
+  "email": "luis@example.com",
+  "password": "clave12345"
+}
+
+### Password numérico (espera 422)
+POST http://localhost:8000/register
+Content-Type: application/json
+
+{
+  "name": "Luis",
+  "email": "luis@example.com",
+  "password": 123
+}
+
+### Ruta inexistente (espera 404)
+POST http://localhost:8000/otra-cosa
+Content-Type: application/json
+
+{}
