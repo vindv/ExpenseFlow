@@ -1,24 +1,39 @@
 <?php
 declare(strict_types=1);
 
-use ExpenseFlow\exceptions\MethodNotAllowedException;
-use ExpenseFlow\exceptions\ValidationException;
-use ExpenseFlow\exceptions\NotFoundException;
+use ExpenseFlow\database\Connection;
+use ExpenseFlow\repositories\UserRepository;
+use ExpenseFlow\services\AuthService;
+use ExpenseFlow\controllers\AuthController;
 
-use ExpenseFlow\http\JsonResponse;
-use ExpenseFlow\http\Request;
-use ExpenseFlow\http\Router;
+use ExpenseFlow\exceptions\{
+    MethodNotAllowedException,
+    ValidationException,
+    NotFoundException
+};
+
+use ExpenseFlow\http\{
+    JsonResponse,
+    Request,
+    Router
+};
 
 require __DIR__ . '/../vendor/autoload.php';
 
 
 try {
+    $config = require __DIR__ . '/../config/database.php';
+
+    $pdo = (new Connection($config))->getConnection();
+    $users = new UserRepository($pdo);
+    $auth = new AuthService($users);
+
+    $authController = new AuthController($auth);
+
     $request = new Request();
     $router = new Router();
 
-    $router->post('/register', function (Request $request): void {
-        JsonResponse::send(200, ['data' => 'ok']);
-    });
+    $router->post('/register', [$authController, 'register']);
 
     $router->post('/login', function (Request $request): void {
         JsonResponse::send(200, ['data' => 'ok']);
