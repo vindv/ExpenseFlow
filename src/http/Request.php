@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace ExpenseFlow\http;
 
 use ExpenseFlow\exceptions\ValidationException;
-use RuntimeException;
 use JsonException;
+use RuntimeException;
 
 class Request
 {
