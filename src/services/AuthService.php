@@ -37,7 +37,7 @@ class AuthService
             throw new ValidationException("The name cannot exceed 100 characters.");
         }
         if(mb_strlen($email) > 150) {
-            throw new ValidationException("The email cannot exceed 100 characters.");
+            throw new ValidationException("The email cannot exceed 150 characters.");
         }
         if(filter_var($email, FILTER_VALIDATE_EMAIL) === false) {
             throw new ValidationException("Invalid email");
