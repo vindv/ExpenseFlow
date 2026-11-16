@@ -9,7 +9,8 @@ use ExpenseFlow\controllers\AuthController;
 use ExpenseFlow\exceptions\{
     MethodNotAllowedException,
     ValidationException,
-    NotFoundException
+    NotFoundException,
+    AuthenticationException
 };
 
 use ExpenseFlow\http\{
@@ -19,7 +20,6 @@ use ExpenseFlow\http\{
 };
 
 require __DIR__ . '/../vendor/autoload.php';
-
 
 try {
     $config = require __DIR__ . '/../config/database.php';
@@ -35,9 +35,7 @@ try {
 
     $router->post('/register', [$authController, 'register']);
 
-    $router->post('/login', function (Request $request): void {
-        JsonResponse::send(200, ['data' => 'ok']);
-    });
+    $router->post('/login', [$authController, 'login']);
 
     $router->dispatch($request);
 
@@ -52,6 +50,10 @@ try {
 }catch(ValidationException $e) {
     JsonResponse::send(422, [
         'error' => $e->getMessage()
+    ]);
+}catch(AuthenticationException $e) {
+    JsonResponse::send(401, [
+        'error' => 'Invalid credentials.'
     ]);
 }catch(Throwable $e) {
     error_log((string)$e);

@@ -32,4 +32,27 @@ class AuthController
         JsonResponse::send(201, ['data' => ['id' => $userId]]);
     }
 
+    public function login(Request $request): void
+    {
+        $body = $request->getBody();
+
+        $email = $body['email'] ?? null;
+        $password = $body['password'] ?? null;
+
+        if(!is_string($email) || !is_string($password)){
+            throw new ValidationException('Email and password are required.');
+        }
+
+        $user = $this->service->login($email, $password);
+
+        if(session_status() === PHP_SESSION_NONE){
+            session_start();
+        }
+        session_regenerate_id(true);
+
+        $_SESSION['user_id'] = (int) $user['id'];
+
+        JsonResponse::send(200, ['data' => $user]);
+    }
+
 }
