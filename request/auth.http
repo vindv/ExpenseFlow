@@ -66,3 +66,36 @@ Content-Type: application/json
 {
   "email": "luis@example.com"
 }
+
+### TEST 1 — POST /register usuario NUEVO → espero 201
+POST http://localhost:8000/register
+Content-Type: application/json
+
+{
+  "name": "Test Router 2",
+  "email": "test.router.2@example.com",
+  "password": "clave12345"
+}
+
+### TEST 2 — POST /login con ese usuario nuevo → espero 200
+POST http://localhost:8000/login
+Content-Type: application/json
+
+{
+  "email": "test.router@example.com",
+  "password": "clave12345"
+}
+
+### TEST 0 — GET /ping → espero 200 {"pong":true}
+# Requiere ruta temporal en index.php (ver abajo)
+GET http://localhost:8000/ping
+
+### GET register - espero 405
+GET http://localhost:8000/register
+
+
+### POST otra-cosa - espero 404
+POST http://localhost:8000/otra-cosa
+Content-Type: application/json
+
+{}

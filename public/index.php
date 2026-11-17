@@ -34,8 +34,11 @@ try {
     $router = new Router();
 
     $router->post('/register', [$authController, 'register']);
-
     $router->post('/login', [$authController, 'login']);
+
+    $router->get('/health', function (Request $request) {
+        JsonResponse::send(200, ['healthcheck' => true]);
+    });
 
     $router->dispatch($request);
 

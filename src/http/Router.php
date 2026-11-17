@@ -13,14 +13,56 @@ class Router
     private array $routes = [];
 
     /**
+     * @param string $method
+     * @param string $path
+     * @param callable $handler
+     * @return void
+     */
+    private function add(string $method, string $path, callable $handler): void
+    {
+        $this->routes[$path][$method] = $handler;
+    }
+
+    /**
+     * @param string $path
+     * @param callable $handler
+     * @return void
+     */
+    public function get(string $path, callable $handler): void
+    {
+        $this->add('GET', $path, $handler);
+    }
+
+    /**
      * @param string $path
      * @param callable $handler
      * @return void
      */
     public function post(string $path, callable $handler): void
     {
-        $this->routes[$path]['POST'] = $handler;
+        $this->add('POST', $path, $handler);
     }
+
+    /**
+     * @param string $path
+     * @param callable $handler
+     * @return void
+     */
+    public function put(string $path, callable $handler): void
+    {
+        $this->add('PUT', $path, $handler);
+    }
+
+    /**
+     * @param string $path
+     * @param callable $handler
+     * @return void
+     */
+    public function delete(string $path, callable $handler): void
+    {
+        $this->add('DELETE', $path, $handler);
+    }
+    
 
     /**
      * @param Request $request
