@@ -30,14 +30,14 @@ CREATE TABLE IF NOT EXISTS expenses (
     expense_date DATE NOT NULL,
     description VARCHAR(255) NOT NULL,
     status ENUM('draft', 'submitted', 'approved', 'rejected', 'reimbursed')
-           NOT NULL DEFAULT 'draft',
+    NOT NULL DEFAULT 'draft',
     created_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
     PRIMARY KEY (id),
     CONSTRAINT fk_expenses_user
-        FOREIGN KEY (user_id) REFERENCES users (id),
+    FOREIGN KEY (user_id) REFERENCES users (id),
     CONSTRAINT fk_expenses_category
-        FOREIGN KEY (category_id) REFERENCES categories (id),
+    FOREIGN KEY (category_id) REFERENCES categories (id),
     CONSTRAINT chk_expenses_amount CHECK (amount > 0)
 ) ENGINE=InnoDB;
 

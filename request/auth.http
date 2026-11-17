@@ -23,3 +23,46 @@ POST http://localhost:8000/otra-cosa
 Content-Type: application/json
 
 {}
+
+### Login correcto - espero 200
+# Espero: status 200, body con data.id, data.name, data.email, data.role
+#         NO debe aparecer password_hash
+#         Header Set-Cookie: PHPSESSID=... presente
+POST http://localhost:8000/login
+Content-Type: application/json
+
+{
+  "email": "luis@example.com",
+  "password": "clave12345"
+}
+
+### Login con contraseña incorrecta - espero 401
+# Espero: status 401, body {"error":"Invalid credentials."}
+#         Sin Set-Cookie de sesión nueva
+POST http://localhost:8000/login
+Content-Type: application/json
+
+{
+  "email": "luis@example.com",
+  "password": "claveIncorrecta"
+}
+
+### Login con email inexistente - espero 401
+# Espero: status 401, body {"error":"Invalid credentials."}  (mismo mensaje exacto que el anterior)
+#         Importante: no debe revelar si el email existe o no
+POST http://localhost:8000/login
+Content-Type: application/json
+
+{
+  "email": "noexiste@example.com",
+  "password": "clave12345"
+}
+
+### Login sin password - espero 422
+# Espero: status 422, body {"error":"Email and password are required."}
+POST http://localhost:8000/login
+Content-Type: application/json
+
+{
+  "email": "luis@example.com"
+}
