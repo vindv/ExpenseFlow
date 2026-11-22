@@ -5,8 +5,11 @@ namespace ExpenseFlow\controllers;
 
 use ExpenseFlow\exceptions\AuthenticationException;
 use ExpenseFlow\exceptions\ValidationException;
+
 use ExpenseFlow\http\JsonResponse;
 use ExpenseFlow\http\Request;
+use ExpenseFlow\http\Session;
+
 use ExpenseFlow\services\AuthService;
 
 class AuthController
@@ -71,15 +74,7 @@ class AuthController
      */
     public function me(Request $request): void
     {
-        if(session_status() === PHP_SESSION_NONE){
-            session_start();
-        }
-
-        $userId = $_SESSION['user_id'] ?? null;
-
-        if(!is_int($userId)){
-            throw new AuthenticationException('Not authenticated.');
-        }
+        $userId = Session::requireUserId();
 
         $user = $this->service->getById($userId);
 
