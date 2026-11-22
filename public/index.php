@@ -36,6 +36,8 @@ try {
     $router->post('/register', [$authController, 'register']);
     $router->post('/login', [$authController, 'login']);
 
+    $router->get('/me', [$authController, 'me']);
+
     $router->get('/health', function (Request $request) {
         JsonResponse::send(200, ['healthcheck' => true]);
     });
@@ -56,7 +58,7 @@ try {
     ]);
 }catch(AuthenticationException $e) {
     JsonResponse::send(401, [
-        'error' => 'Invalid credentials.'
+        'error' => $e->getMessage()
     ]);
 }catch(Throwable $e) {
     error_log((string)$e);

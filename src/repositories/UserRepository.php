@@ -49,4 +49,20 @@ class UserRepository
 
         return $user === false ? null : $user;
     }
+
+    /**
+     * @param int $id
+     * @return array|null
+     */
+    public function findById(int $id): ?array
+    {
+        $sql = 'SELECT id, email, name, role, created_at FROM users WHERE id = :id LIMIT 1';
+
+        $stmt = $this->connection->prepare($sql);
+        $stmt->execute(['id' => $id]);
+
+        $user = $stmt->fetch();
+
+        return $user === false ? null : $user;
+    }
 }

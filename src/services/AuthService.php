@@ -82,4 +82,13 @@ class AuthService
         return $user;
     }
 
+    /**
+     * @param int $userId
+     * @return array|null
+     */
+    public function getById(int $userId): ?array
+    {
+        return $this->users->findById($userId);
+    }
+
 }

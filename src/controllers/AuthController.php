@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace ExpenseFlow\controllers;
 
+use ExpenseFlow\exceptions\AuthenticationException;
 use ExpenseFlow\exceptions\ValidationException;
 use ExpenseFlow\http\JsonResponse;
 use ExpenseFlow\http\Request;
@@ -11,10 +12,15 @@ use ExpenseFlow\services\AuthService;
 class AuthController
 {
 
-    public function __construct(private AuthService $service)
-    {
-    }
+    /**
+     * @param AuthService $service
+     */
+    public function __construct(private AuthService $service){}
 
+    /**
+     * @param Request $request
+     * @return void
+     */
     public function register(Request $request): void
     {
         $body = $request->getBody();
@@ -32,6 +38,10 @@ class AuthController
         JsonResponse::send(201, ['data' => ['id' => $userId]]);
     }
 
+    /**
+     * @param Request $request
+     * @return void
+     */
     public function login(Request $request): void
     {
         $body = $request->getBody();
@@ -51,6 +61,34 @@ class AuthController
         session_regenerate_id(true);
 
         $_SESSION['user_id'] = (int) $user['id'];
+
+        JsonResponse::send(200, ['data' => $user]);
+    }
+
+    /**
+     * @param Request $request
+     * @return void
+     */
+    public function me(Request $request): void
+    {
+        if(session_status() === PHP_SESSION_NONE){
+            session_start();
+        }
+
+        $userId = $_SESSION['user_id'] ?? null;
+
+        if(!is_int($userId)){
+            throw new AuthenticationException('Not authenticated.');
+        }
+
+        $user = $this->service->getById($userId);
+
+        if($user === null){
+            $_SESSION = [];
+            session_destroy();
+
+            throw new AuthenticationException('Not authenticated.');
+        }
 
         JsonResponse::send(200, ['data' => $user]);
     }
